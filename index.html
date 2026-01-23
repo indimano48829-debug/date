@@ -109,31 +109,42 @@
 
     .choice-img {
       width: 100%;
-      height: 180px;
+      height: 220px;
       object-fit: cover;
-      border-radius: 16px;
+      border-radius: 20px;
       margin: 20px 0;
       box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     }
 
+    /* Теплый синий цвет для кнопок (как на скриншоте) */
     .choice-btn {
-      padding: 14px 24px;
+      padding: 16px 24px;
       margin: 8px 0;
       width: 100%;
       border-radius: 16px;
       font-size: 1.1rem;
-      font-weight: bold;
-      color: white;
-      border: none;
+      font-weight: 600;
+      color: #333;
+      background: #e3f2fd; /* светло-синий */
+      border: 1px solid #bbdefb;
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     .choice-btn:hover {
-      transform: scale(1.03);
+      background: #bbdefb;
+      transform: scale(1.02);
     }
-    .choice-btn:nth-child(1) { background: #2196F3; } /* Каток */
-    .choice-btn:nth-child(2) { background: #4CAF50; } /* Горнолыжный */
-    .choice-btn:nth-child(3) { background: #FF9800; } /* Ресторан */
+    .choice-btn:active {
+      background: #90caf9;
+    }
+
+    .icon {
+      font-size: 1.2rem;
+    }
   </style>
 </head>
 <body>
@@ -143,8 +154,11 @@
     <div class="screen" id="screen1">
       <div class="card">
         <h1>Привет, Настена!❤️</h1>
-        <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.<br>
+        <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
         <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
+
+        <!-- Картинка с котами -->
+        <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
 
         <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
           <input type="text" name="answer" id="answer-field">
@@ -153,9 +167,6 @@
         <div class="rsvp">
           <button class="btn yes" onclick="submitResponse('Да')">Да</button>
           <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
-
-        <!-- Картинка с котами -->
-        <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
         </div>
       </div>
     </div>
@@ -166,14 +177,23 @@
         <h2>🎉 Отлично! А куда пойдём?</h2>
         <p>Выбери, что тебе ближе:</p>
 
+        <!-- Каток -->
         <img src="https://i.imgur.com/VahAzez.png" alt="Каток" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Каток')">⛸️ Каток</button>
+        <button class="choice-btn" onclick="sendChoice('Каток')">
+          <span class="icon">⛸️</span> Каток
+        </button>
 
+        <!-- Горнолыжный курорт -->
         <img src="https://i.imgur.com/1VIISI8.jpeg" alt="Горнолыжный курорт" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">🏔️ Горнолыжный курорт</button>
+        <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">
+          <span class="icon">🏔️</span> Горнолыжный курорт
+        </button>
 
+        <!-- Ресторан -->
         <img src="https://i.imgur.com/jLtgvsA.jpeg" alt="Ресторан" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Ресторан')">🍷 Ресторан</button>
+        <button class="choice-btn" onclick="sendChoice('Ресторан')">
+          <span class="icon">🍷</span> Ресторан
+        </button>
       </div>
     </div>
   </div>
