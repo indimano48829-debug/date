@@ -5,284 +5,101 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Ты приглашена ❤️</title>
   <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+    * {
+      box-sizing: border-box;
       margin: 0;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      padding: 0;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #ffafbd, #ffc3a0);
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
       text-align: center;
       color: #333;
-      box-sizing: border-box;
-      overflow-x: hidden;
     }
-
-    /* ЕДИНЫЙ ЦЕНТРАЛЬНЫЙ КОНТЕЙНЕР */
-    .center-wrapper {
-      width: 90%;
-      max-width: 500px;
-      padding: 0 20px;
-      box-sizing: border-box;
-    }
-
-    .screen {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.4s ease, transform 0.4s ease;
-    }
-    .screen.fade-out {
-      opacity: 0;
-      transform: translateY(-20px);
-      pointer-events: none;
-      position: absolute; /* чтобы не мешал второму экрану */
-      width: 100%;
-    }
-
-    .card, .choice-card {
+    .card {
       background: white;
-      padding: 32px 28px;
-      border-radius: 28px;
-      box-shadow: 0 12px 32px rgba(0,0,0,0.14);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.6);
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      width: 100%;
+      max-width: 480px;
     }
-
     h1 {
       color: #e91e63;
       margin-bottom: 20px;
-      font-size: 2.0rem;
-      line-height: 1.25;
-      font-weight: 700;
-    }
-    h2 {
-      color: #e91e63;
-      margin-bottom: 16px;
-      font-size: 1.6rem;
-      font-weight: 600;
+      font-size: 2rem;
     }
     p {
       font-size: 1.2rem;
       line-height: 1.5;
-      margin-bottom: 18px;
+      margin-bottom: 24px;
       color: #555;
     }
-
     .rsvp {
       display: flex;
       justify-content: center;
       gap: 20px;
       flex-wrap: wrap;
-      margin-top: 20px;
     }
-
     .btn {
       padding: 16px 32px;
       border: none;
-      border-radius: 60px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
+      border-radius: 50px;
+      font-weight: bold;
       font-size: 1.2rem;
-      min-width: 110px;
       color: white;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+      transition: transform 0.2s;
     }
     .yes { background: #4caf50; }
     .no { background: #f44336; }
-    .btn:hover:not(:disabled),
-    .btn:active:not(:disabled) {
-      transform: scale(1.04);
-      filter: brightness(1.1);
-    }
-    .btn:disabled {
-      opacity: 0.85;
-      cursor: default;
-      transform: none;
-    }
-
-    #response {
-      margin-top: 24px;
-      font-weight: 600;
-      min-height: 2.2rem;
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      font-size: 1.15rem;
-      line-height: 1.4;
-    }
-    #response.show {
-      opacity: 1;
-    }
-
-    .heart {
-      animation: pulse 1.2s infinite;
-      display: inline-block;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-
-    /* Второй экран — изначально скрыт */
-    .choice-screen {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      pointer-events: none;
-    }
-    .choice-screen.show {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-
-    .choice-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 20px;
-      margin-bottom: 16px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    }
-
-    .choice-btn {
-      padding: 16px 24px;
-      margin: 10px 0;
-      width: 100%;
-      border-radius: 18px;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .choice-btn:hover {
-      transform: scale(1.02);
-      filter: brightness(1.1);
-    }
-    .choice-btn:nth-child(1) { background: #2196F3; } /* Каток */
-    .choice-btn:nth-child(2) { background: #4CAF50; } /* Горнолыжный */
-    .choice-btn:nth-child(3) { background: #FF9800; } /* Ресторан */
+    .btn:hover { transform: scale(1.05); }
   </style>
 </head>
 <body>
-  <!-- ЕДИНЫЙ ЦЕНТРАЛЬНЫЙ КОНТЕЙНЕР -->
-  <div class="center-wrapper">
-    <!-- Первый экран -->
-    <div class="screen" id="screen1">
-      <div class="card">
-        <h1>❤️ Привет, Настена!</h1>
-        <p>Прошло очень много времени с того самого момента…<br>Я хочу наладить коннект между нами.</p>
-        <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
-        
-        <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
-          <input type="text" name="answer" id="answer-field">
-        </form>
+  <div class="card">
+    <h1>❤️ Привет, Настена!</h1>
+    <p>Прошло очень много времени с того самого момента…<br>Я хочу наладить коннект между нами.</p>
+    <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
+    
+    <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
+      <input type="text" name="answer" id="answer-field">
+    </form>
 
-        <div class="rsvp">
-          <button class="btn yes" onclick="submitResponse('Да')">Да</button>
-          <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
-        </div>
-
-        <div id="response"></div>
-      </div>
-    </div>
-
-    <!-- Второй экран -->
-    <div class="screen choice-screen" id="screen2">
-      <div class="choice-card">
-        <h2>🎉 Отлично! А куда пойдём?</h2>
-        <p>Выбери, что тебе ближе:</p>
-
-        <div class="choice-item">
-          <img src="https://i.imgur.com/7Q4vY8p.jpg" alt="Каток" class="choice-img">
-          <button class="choice-btn" onclick="sendChoice('Каток')">⛸️ Каток</button>
-        </div>
-
-        <div class="choice-item">
-          <img src="https://i.imgur.com/6qW9KzL.jpg" alt="Горнолыжный курорт" class="choice-img">
-          <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">🏔️ Горнолыжный курорт</button>
-        </div>
-
-        <div class="choice-item">
-          <img src="https://i.imgur.com/5R0fJxk.jpg" alt="Ресторан" class="choice-img">
-          <button class="choice-btn" onclick="sendChoice('Ресторан')">🍷 Ресторан</button>
-        </div>
-      </div>
+    <div class="rsvp">
+      <button class="btn yes" onclick="submitResponse('Да')">Да</button>
+      <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
     </div>
   </div>
 
   <script>
     function submitResponse(answer) {
-      const responseDiv = document.getElementById('response');
-      const screen1 = document.getElementById('screen1');
-      const screen2 = document.getElementById('screen2');
-      
       document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
-
-      if (answer === 'Да') {
-        responseDiv.innerHTML = '<span class="heart">💖</span> Спасибо! Я так рад!<br>Сейчас выбери, куда пойдём...';
-        responseDiv.classList.add('show');
-
-        setTimeout(() => {
-          screen1.classList.add('fade-out');
-          screen2.classList.add('show');
-        }, 400);
-      } else {
-        responseDiv.innerHTML = '😔 Жаль… Но я всё равно ценю тебя.<br>С этого момента перестану писать.<br>С уважением, твой котокот.';
-        responseDiv.classList.add('show');
-        sendFinalAnswer('Нет');
-      }
-    }
-
-    function sendChoice(choice) {
-      const responseDiv = document.createElement('div');
-      responseDiv.id = 'final-message';
-      responseDiv.innerHTML = '<span class="heart">💖</span> Отлично! Значит, мы идём на <strong>' + choice + '</strong>!<br>Подробности расскажу лично.';
       
-      Object.assign(responseDiv.style, {
-        position: 'fixed',
-        bottom: 'env(safe-area-inset-bottom, 20px)',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        backgroundColor: 'rgba(255,255,255,0.96)',
-        padding: '16px 24px',
-        borderRadius: '24px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
-        zIndex: '1000',
-        maxWidth: '90%',
-        width: 'auto',
-        fontSize: '1.15rem',
-        fontWeight: '600',
-        color: '#333',
-        textAlign: 'center',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        border: '1px solid rgba(255,255,255,0.7)',
-        opacity: '0',
-        transition: 'opacity 0.4s ease'
-      });
-
-      document.body.appendChild(responseDiv);
-      setTimeout(() => responseDiv.style.opacity = '1', 100);
-      sendFinalAnswer('Да — ' + choice);
-    }
-
-    function sendFinalAnswer(finalAnswer) {
-      document.getElementById('answer-field').value = finalAnswer;
+      document.getElementById('answer-field').value = answer;
       const form = document.getElementById('rsvp-form');
       const formData = new FormData(form);
+
       fetch(form.action, {
         method: 'POST',
         body: formData,
         headers: { 'Accept': 'application/json' }
-      }).catch(console.error);
+      })
+      .then(response => {
+        if (response.ok) {
+          alert('💖 Ответ отправлен! Спасибо!');
+        } else {
+          throw new Error();
+        }
+      })
+      .catch(() => {
+        alert('❌ Не удалось отправить. Попробуй позже.');
+      });
     }
   </script>
 </body>
