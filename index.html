@@ -20,11 +20,15 @@
       overflow-x: hidden;
     }
 
-    .screen {
+    /* ЕДИНЫЙ ЦЕНТРАЛЬНЫЙ КОНТЕЙНЕР */
+    .center-wrapper {
       width: 90%;
       max-width: 500px;
       padding: 0 20px;
       box-sizing: border-box;
+    }
+
+    .screen {
       opacity: 1;
       transform: translateY(0);
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -33,6 +37,8 @@
       opacity: 0;
       transform: translateY(-20px);
       pointer-events: none;
+      position: absolute; /* чтобы не мешал второму экрану */
+      width: 100%;
     }
 
     .card, .choice-card {
@@ -121,15 +127,11 @@
       50% { transform: scale(1.2); }
     }
 
-    /* Второй экран */
+    /* Второй экран — изначально скрыт */
     .choice-screen {
       opacity: 0;
       transform: translateY(20px);
       transition: opacity 0.5s ease, transform 0.5s ease;
-      width: 90%;
-      max-width: 500px;
-      padding: 0 20px;
-      box-sizing: border-box;
       pointer-events: none;
     }
     .choice-screen.show {
@@ -167,57 +169,51 @@
     .choice-btn:nth-child(1) { background: #2196F3; } /* Каток */
     .choice-btn:nth-child(2) { background: #4CAF50; } /* Горнолыжный */
     .choice-btn:nth-child(3) { background: #FF9800; } /* Ресторан */
-
-    /* Для очень маленьких экранов */
-    @media (max-width: 390px) {
-      .card, .choice-card {
-        padding: 28px 24px;
-      }
-      h1 { font-size: 1.8rem; }
-      .btn { padding: 14px 28px; font-size: 1.1rem; }
-    }
   </style>
 </head>
 <body>
-  <!-- Первый экран -->
-  <div class="screen" id="screen1">
-    <div class="card">
-      <h1>❤️ Привет, Настена!</h1>
-      <p>Прошло очень много времени с того самого момента…<br>Я хочу наладить коннект между нами.</p>
-      <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
-      
-      <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
-        <input type="text" name="answer" id="answer-field">
-      </form>
+  <!-- ЕДИНЫЙ ЦЕНТРАЛЬНЫЙ КОНТЕЙНЕР -->
+  <div class="center-wrapper">
+    <!-- Первый экран -->
+    <div class="screen" id="screen1">
+      <div class="card">
+        <h1>❤️ Привет, Настена!</h1>
+        <p>Прошло очень много времени с того самого момента…<br>Я хочу наладить коннект между нами.</p>
+        <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
+        
+        <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
+          <input type="text" name="answer" id="answer-field">
+        </form>
 
-      <div class="rsvp">
-        <button class="btn yes" onclick="submitResponse('Да')">Да</button>
-        <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
+        <div class="rsvp">
+          <button class="btn yes" onclick="submitResponse('Да')">Да</button>
+          <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
+        </div>
+
+        <div id="response"></div>
       </div>
-
-      <div id="response"></div>
     </div>
-  </div>
 
-  <!-- Второй экран -->
-  <div class="choice-screen" id="screen2">
-    <div class="choice-card">
-      <h2>🎉 Отлично! А куда пойдём?</h2>
-      <p>Выбери, что тебе ближе:</p>
+    <!-- Второй экран -->
+    <div class="screen choice-screen" id="screen2">
+      <div class="choice-card">
+        <h2>🎉 Отлично! А куда пойдём?</h2>
+        <p>Выбери, что тебе ближе:</p>
 
-      <div class="choice-item">
-        <img src="https://i.imgur.com/7Q4vY8p.jpg" alt="Каток" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Каток')">⛸️ Каток</button>
-      </div>
+        <div class="choice-item">
+          <img src="https://i.imgur.com/7Q4vY8p.jpg" alt="Каток" class="choice-img">
+          <button class="choice-btn" onclick="sendChoice('Каток')">⛸️ Каток</button>
+        </div>
 
-      <div class="choice-item">
-        <img src="https://i.imgur.com/6qW9KzL.jpg" alt="Горнолыжный курорт" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">🏔️ Горнолыжный курорт</button>
-      </div>
+        <div class="choice-item">
+          <img src="https://i.imgur.com/6qW9KzL.jpg" alt="Горнолыжный курорт" class="choice-img">
+          <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">🏔️ Горнолыжный курорт</button>
+        </div>
 
-      <div class="choice-item">
-        <img src="https://i.imgur.com/5R0fJxk.jpg" alt="Ресторан" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Ресторан')">🍷 Ресторан</button>
+        <div class="choice-item">
+          <img src="https://i.imgur.com/5R0fJxk.jpg" alt="Ресторан" class="choice-img">
+          <button class="choice-btn" onclick="sendChoice('Ресторан')">🍷 Ресторан</button>
+        </div>
       </div>
     </div>
   </div>
