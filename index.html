@@ -48,7 +48,6 @@
       color: #555;
     }
 
-    /* Картинка с котами */
     .cat-image {
       width: 100%;
       height: auto;
@@ -57,7 +56,6 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.1);
     }
 
-    /* Картинки на втором экране */
     .choice-img {
       width: 100%;
       height: 220px;
@@ -120,6 +118,11 @@
 </head>
 <body>
 
+  <!-- Скрытая форма Formspree -->
+  <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
+    <input type="text" name="answer" id="answer-field">
+  </form>
+
   <!-- Экран 1 -->
   <div class="screen active" id="screen1">
     <div class="card">
@@ -127,11 +130,10 @@
       <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
       <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
 
-      <!-- Картинка с котами -->
       <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
 
-      <button class="btn yes" onclick="showScreen('screen2')">Да</button>
-      <button class="btn no" onclick="showScreen('screen3')">Нет</button>
+      <button class="btn yes" onclick="submitAndGo('Да', 'screen2')">Да</button>
+      <button class="btn no" onclick="submitAndGo('Нет', 'screen3')">Нет</button>
     </div>
   </div>
 
@@ -142,17 +144,17 @@
       <p>Выбери, что тебе ближе:</p>
 
       <img src="https://i.imgur.com/VahAzez.png" alt="Каток" class="choice-img">
-      <button class="choice-btn" onclick="alert('Идём на каток! 💙')">
+      <button class="choice-btn" onclick="submitAndAlert('Да — Каток')">
         <span>⛸️</span> Каток
       </button>
 
       <img src="https://i.imgur.com/1VIISI8.jpeg" alt="Горнолыжный курорт" class="choice-img">
-      <button class="choice-btn" onclick="alert('Горнолыжный курорт! ❄️')">
+      <button class="choice-btn" onclick="submitAndAlert('Да — Горнолыжный курорт')">
         <span>🏔️</span> Горнолыжный курорт
       </button>
 
       <img src="https://i.imgur.com/jLtgvsA.jpeg" alt="Ресторан" class="choice-img">
-      <button class="choice-btn" onclick="alert('Ресторан! 🍷')">
+      <button class="choice-btn" onclick="submitAndAlert('Да — Ресторан')">
         <span>🍷</span> Ресторан
       </button>
     </div>
@@ -175,9 +177,29 @@
   </div>
 
   <script>
-    function showScreen(id) {
+    function submitToFormspree(answer) {
+      const field = document.getElementById('answer-field');
+      const form = document.getElementById('rsvp-form');
+      if (field && form) {
+        field.value = answer;
+        const formData = new FormData(form);
+        fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        }).catch(err => console.error('Ошибка отправки:', err));
+      }
+    }
+
+    function submitAndGo(answer, nextScreenId) {
+      submitToFormspree(answer);
       document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      document.getElementById(nextScreenId).classList.add('active');
+    }
+
+    function submitAndAlert(answer) {
+      submitToFormspree(answer);
+      alert('💖 Отлично! Значит, мы идём на ' + answer.split(' — ')[1] + '!');
     }
   </script>
 </body>
