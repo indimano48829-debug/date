@@ -20,10 +20,10 @@
       padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
       text-align: center;
       color: #333;
-      position: relative; /* важно для position: absolute */
+      position: relative;
     }
 
-    /* 🔑 КЛЮЧЕВОЕ ИЗМЕНЕНИЕ */
+    /* 🔑 Все экраны — абсолютно позиционированные */
     .screen {
       position: absolute;
       top: 0;
@@ -51,7 +51,100 @@
       width: 100%;
     }
 
-    /* ... остальной CSS без изменений ... */
+    h1 {
+      color: #e91e63;
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+    h2 {
+      color: #e91e63;
+      margin-bottom: 16px;
+      font-size: 1.6rem;
+    }
+    p {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      color: #555;
+    }
+
+    .rsvp {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 16px 32px;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .yes { background: #4caf50; }
+    .no { background: #f44336; }
+    .btn:hover { transform: scale(1.05); }
+
+    .cat-image {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      margin-top: 20px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      object-fit: cover;
+    }
+
+    .choice-screen {
+      opacity: 0;
+    }
+    .choice-screen.show {
+      opacity: 1;
+    }
+
+    .choice-img {
+      width: 100%;
+      height: 264px;
+      object-fit: cover;
+      border-radius: 20px;
+      margin: 24px 0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+
+    .choice-btn {
+      padding: 16px 24px;
+      margin: 8px 0;
+      width: 100%;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #333;
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .choice-btn:hover {
+      background: #bbdefb;
+      transform: scale(1.02);
+    }
+
+    .icon {
+      font-size: 1.2rem;
+    }
+
+    .video-screen {
+      opacity: 0;
+    }
+    .video-screen.show {
+      opacity: 1;
+    }
 
     .video-wrapper {
       position: relative;
@@ -61,6 +154,7 @@
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+      margin: 20px 0;
     }
     .video-wrapper iframe {
       position: absolute;
@@ -110,14 +204,14 @@
     </div>
   </div>
 
-  <!-- Третий экран -->
+  <!-- Третий экран — видео -->
   <div class="screen video-screen" id="screen3">
     <div class="video-card">
       <h2>😔 Я всё равно ценю тебя…</h2>
       <div class="video-wrapper">
         <iframe 
           src="https://www.youtube.com/embed/pm5DLDhn2F0?autoplay=1&mute=1"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
           playsinline>
         </iframe>
@@ -125,10 +219,9 @@
     </div>
   </div>
 
-   <script>
+  <script>
     function submitResponse(answer) {
       const screen1 = document.getElementById('screen1');
-      
       document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
 
       if (answer === 'Да') {
@@ -137,9 +230,7 @@
           document.getElementById('screen2').classList.add('show');
         }, 300);
       } else {
-        // Отправляем "Нет"
         sendFinalAnswer('Нет');
-        
         setTimeout(() => {
           screen1.classList.add('fade-out');
           document.getElementById('screen3').classList.add('show');
@@ -164,5 +255,4 @@
     }
   </script>
 </body>
-
 </html>
