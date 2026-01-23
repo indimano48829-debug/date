@@ -24,7 +24,7 @@
 
     .center-container {
       width: 100%;
-      max-width: 550px;
+      max-width: 480px;
     }
 
     .screen {
@@ -40,7 +40,7 @@
       width: 100%;
     }
 
-    .card, .choice-card {
+    .card, .choice-card, .video-card {
       background: white;
       padding: 32px;
       border-radius: 24px;
@@ -109,14 +109,13 @@
 
     .choice-img {
       width: 100%;
-      height: auto;
+      height: 264px;
       object-fit: cover;
-      border-radius: 25px;
-      margin: 25px 0;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      border-radius: 20px;
+      margin: 24px 0;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
     }
 
-    /* Теплый синий цвет для кнопок (как на скриншоте) */
     .choice-btn {
       padding: 16px 24px;
       margin: 8px 0;
@@ -125,7 +124,7 @@
       font-size: 1.1rem;
       font-weight: 600;
       color: #333;
-      background: #e3f2fd; /* светло-синий */
+      background: #e3f2fd;
       border: 1px solid #bbdefb;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -145,6 +144,38 @@
     .icon {
       font-size: 1.2rem;
     }
+
+    /* Третий экран — видео */
+    .video-screen {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+    .video-screen.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 56.25%; /* 16:9 соотношение */
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+    }
+    .video-wrapper iframe,
+    .video-wrapper video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -157,6 +188,8 @@
         <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
         <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
 
+        <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
+
         <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
           <input type="text" name="answer" id="answer-field">
         </form>
@@ -164,9 +197,6 @@
         <div class="rsvp">
           <button class="btn yes" onclick="submitResponse('Да')">Да</button>
           <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
-
-        <!-- Картинка с котами -->
-        <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
         </div>
       </div>
     </div>
@@ -177,23 +207,36 @@
         <h2>🎉 Отлично! А куда пойдём?</h2>
         <p>Выбери, что тебе ближе:</p>
 
-        <!-- Каток -->
         <img src="https://i.imgur.com/VahAzez.png" alt="Каток" class="choice-img">
         <button class="choice-btn" onclick="sendChoice('Каток')">
           <span class="icon">⛸️</span> Каток
         </button>
 
-        <!-- Горнолыжный курорт -->
         <img src="https://i.imgur.com/1VIISI8.jpeg" alt="Горнолыжный курорт" class="choice-img">
         <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">
           <span class="icon">🏔️</span> Горнолыжный курорт
         </button>
 
-        <!-- Ресторан -->
         <img src="https://i.imgur.com/jLtgvsA.jpeg" alt="Ресторан" class="choice-img">
         <button class="choice-btn" onclick="sendChoice('Ресторан')">
           <span class="icon">🍷</span> Ресторан
         </button>
+      </div>
+    </div>
+
+    <!-- Третий экран — видео -->
+    <div class="screen video-screen" id="screen3">
+      <div class="video-card">
+        <h2>😔 Я всё равно ценю тебя…</h2>
+
+        <!-- ⚠️ ЗАМЕНИ ССЫЛКУ НИЖЕ НА СВОЮ -->
+        <div class="video-wrapper">
+          <iframe 
+            src="https://www.youtube.com/shorts/pm5DLDhn2F0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -201,18 +244,22 @@
   <script>
     function submitResponse(answer) {
       const screen1 = document.getElementById('screen1');
-      const screen2 = document.getElementById('screen2');
       
       document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
 
       if (answer === 'Да') {
         setTimeout(() => {
           screen1.classList.add('fade-out');
-          screen2.classList.add('show');
+          document.getElementById('screen2').classList.add('show');
         }, 300);
       } else {
+        // Отправляем "Нет"
         sendFinalAnswer('Нет');
-        alert('😔 Жаль… Но я всё равно ценю тебя.');
+        
+        setTimeout(() => {
+          screen1.classList.add('fade-out');
+          document.getElementById('screen3').classList.add('show');
+        }, 300);
       }
     }
 
@@ -233,6 +280,4 @@
     }
   </script>
 </body>
-
 </html>
-
