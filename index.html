@@ -225,7 +225,8 @@
     </div>
   </div>
 
-  <script>
+ <script>
+  document.addEventListener('DOMContentLoaded', function() {
     function submitResponse(answer) {
       const screen1 = document.getElementById('screen1');
       document.querySelectorAll('.btn').forEach(btn => btn.disabled = true);
@@ -237,9 +238,8 @@
         }, 300);
       } else {
         sendFinalAnswer('Нет');
-        // Загружаем видео с автоплеем (без звука)
         const iframe = document.getElementById('video-frame');
-        iframe.src = "https://www.youtube.com/embed/pm5DLDhn2F0?autoplay=1&mute=1&loop=0";
+        iframe.src = "https://www.youtube.com/embed/pm5DLDhn2F0?autoplay=1&mute=1";
         
         setTimeout(() => {
           screen1.classList.add('fade-out');
@@ -263,8 +263,17 @@
         headers: { 'Accept': 'application/json' }
       }).catch(console.error);
     }
-  </script>
+
+    // Назначаем обработчики кнопкам
+    const yesBtn = document.querySelector('.btn.yes');
+    const noBtn = document.querySelector('.btn.no');
+    
+    if (yesBtn) yesBtn.onclick = () => submitResponse('Да');
+    if (noBtn) noBtn.onclick = () => submitResponse('Нет');
+  });
+</script>
 </body>
 
 </html>
+
 
