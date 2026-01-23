@@ -164,25 +164,25 @@
   </style>
 </head>
 <body>
-  <!-- Первый экран -->
-  <div class="screen" id="screen1">
-    <div class="card">
-      <h1>Привет, Настена!❤️</h1>
-      <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
-      <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
+<!-- Первый экран -->
+<div class="screen" id="screen1">
+  <div class="card">
+    <h1>Привет, Настена!❤️</h1>
+    <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
+    <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
 
-      <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
+    <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
 
-      <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
-        <input type="text" name="answer" id="answer-field">
-      </form>
+    <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
+      <input type="text" name="answer" id="answer-field">
+    </form>
 
-      <div class="rsvp">
-        <button class="btn yes" onclick="submitResponse('Да')">Да</button>
-        <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
-      </div>
+    <div class="rsvp">
+      <button class="btn yes" onclick="submitResponse('Да')">Да</button>
+      <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
     </div>
   </div>
+</div>
 
   <!-- Второй экран -->
   <div class="screen choice-screen" id="screen2">
@@ -267,3 +267,4 @@
 </body>
 
 </html>
+
