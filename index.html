@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Ты приглашена ❤️</title>
   <style>
-    /* Полный экран + безопасные зоны */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
       background: linear-gradient(135deg, #ffafbd, #ffc3a0);
       margin: 0;
       padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
@@ -18,11 +17,12 @@
       text-align: center;
       color: #333;
       box-sizing: border-box;
+      overflow-x: hidden;
     }
 
     .screen {
       width: 90%;
-      max-width: 500px; /* ширина под большой экран */
+      max-width: 500px;
       padding: 0 20px;
       box-sizing: border-box;
       opacity: 1;
