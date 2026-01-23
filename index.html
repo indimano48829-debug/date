@@ -20,30 +20,26 @@
       padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
       text-align: center;
       color: #333;
+      position: relative;
     }
 
-    .center-container {
-      width: 100%;
-      max-width: 480px;
-    }
-
-    /* Каждый экран — на всю высоту */
+    /* Все экраны — абсолютно позиционированные */
     .screen {
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
-      min-height: 100vh; /* ← ключевое! */
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
+      opacity: 1;
+      transition: opacity 0.4s ease;
+      pointer-events: auto;
     }
     .screen.fade-out {
       opacity: 0;
-      transform: translateY(-20px);
       pointer-events: none;
-      position: absolute;
-      width: 100%;
     }
 
     .card, .choice-card, .video-card {
@@ -103,14 +99,9 @@
 
     .choice-screen {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      pointer-events: none;
     }
     .choice-screen.show {
       opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
     }
 
     .choice-img {
@@ -144,31 +135,25 @@
       transform: scale(1.02);
     }
 
-    /* Видео экран */
+    /* Видео */
     .video-screen {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      pointer-events: none;
     }
     .video-screen.show {
       opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
     }
 
     .video-wrapper {
       position: relative;
       width: 100%;
       height: 0;
-      padding-bottom: 56.25%; /* 16:9 */
+      padding-bottom: 177.78%; /* 9:16 для Shorts (вертикальное видео) */
       border-radius: 20px;
       overflow: hidden;
       box-shadow: 0 8px 20px rgba(0,0,0,0.12);
       margin: 20px 0;
     }
-    .video-wrapper iframe,
-    .video-wrapper video {
+    .video-wrapper iframe {
       position: absolute;
       top: 0;
       left: 0;
@@ -179,65 +164,63 @@
   </style>
 </head>
 <body>
-  <div class="center-container">
-    <!-- Первый экран -->
-    <div class="screen" id="screen1">
-      <div class="card">
-        <h1>Привет, Настена!❤️</h1>
-        <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
-        <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
+  <!-- Первый экран -->
+  <div class="screen" id="screen1">
+    <div class="card">
+      <h1>Привет, Настена!❤️</h1>
+      <p>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>Я хочу наладить коннект между нами.</p>
+      <p><strong>Пойдёшь ли ты со мной на свидание?</strong></p>
 
-        <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
+      <img src="https://i.imgur.com/H8zwYTm.jpeg" alt="Коты обнимаются" class="cat-image">
 
-        <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
-          <input type="text" name="answer" id="answer-field">
-        </form>
+      <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
+        <input type="text" name="answer" id="answer-field">
+      </form>
 
-        <div class="rsvp">
-          <button class="btn yes" onclick="submitResponse('Да')">Да</button>
-          <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
-        </div>
+      <div class="rsvp">
+        <button class="btn yes" onclick="submitResponse('Да')">Да</button>
+        <button class="btn no" onclick="submitResponse('Нет')">Нет</button>
       </div>
     </div>
+  </div>
 
-    <!-- Второй экран -->
-    <div class="screen choice-screen" id="screen2">
-      <div class="choice-card">
-        <h2>🎉 Отлично! А куда пойдём?</h2>
-        <p>Выбери, что тебе ближе:</p>
+  <!-- Второй экран -->
+  <div class="screen choice-screen" id="screen2">
+    <div class="choice-card">
+      <h2>🎉 Отлично! А куда пойдём?</h2>
+      <p>Выбери, что тебе ближе:</p>
 
-        <img src="https://i.imgur.com/VahAzez.png" alt="Каток" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Каток')">
-          <span class="icon">⛸️</span> Каток
-        </button>
+      <img src="https://i.imgur.com/VahAzez.png" alt="Каток" class="choice-img">
+      <button class="choice-btn" onclick="sendChoice('Каток')">
+        <span class="icon">⛸️</span> Каток
+      </button>
 
-        <img src="https://i.imgur.com/1VIISI8.jpeg" alt="Горнолыжный курорт" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">
-          <span class="icon">🏔️</span> Горнолыжный курорт
-        </button>
+      <img src="https://i.imgur.com/1VIISI8.jpeg" alt="Горнолыжный курорт" class="choice-img">
+      <button class="choice-btn" onclick="sendChoice('Горнолыжный курорт')">
+        <span class="icon">🏔️</span> Горнолыжный курорт
+      </button>
 
-        <img src="https://i.imgur.com/jLtgvsA.jpeg" alt="Ресторан" class="choice-img">
-        <button class="choice-btn" onclick="sendChoice('Ресторан')">
-          <span class="icon">🍷</span> Ресторан
-        </button>
-      </div>
+      <img src="https://i.imgur.com/jLtgvsA.jpeg" alt="Ресторан" class="choice-img">
+      <button class="choice-btn" onclick="sendChoice('Ресторан')">
+        <span class="icon">🍷</span> Ресторан
+      </button>
     </div>
+  </div>
 
-    <!-- Третий экран — ВИДЕО -->
-    <div class="screen video-screen" id="screen3">
-      <div class="video-card">
-        <h2>😔 Я всё равно ценю тебя…</h2>
-        <p>Посмотри это видео до конца.</p>
+  <!-- Третий экран — ВИДЕО -->
+  <div class="screen video-screen" id="screen3">
+    <div class="video-card">
+      <h2>😔 Я всё равно ценю тебя…</h2>
+      <p>Посмотри это видео до конца.</p>
 
-        <!-- ⚠️ ЗАМЕНИ ССЫЛКУ НА СВОЮ (обязательно embed!) -->
-        <div class="video-wrapper">
-          <iframe 
-            src="https://www.youtube.com/embed/pm5DLDhn2F0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            playsinline>
-          </iframe>
-        </div>
+      <div class="video-wrapper">
+        <iframe 
+          id="video-frame"
+          src=""
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+          playsinline>
+        </iframe>
       </div>
     </div>
   </div>
@@ -254,6 +237,10 @@
         }, 300);
       } else {
         sendFinalAnswer('Нет');
+        // Загружаем видео с автоплеем (без звука)
+        const iframe = document.getElementById('video-frame');
+        iframe.src = "https://www.youtube.com/embed/pm5DLDhn2F0?autoplay=1&mute=1&loop=0";
+        
         setTimeout(() => {
           screen1.classList.add('fade-out');
           document.getElementById('screen3').classList.add('show');
@@ -278,5 +265,4 @@
     }
   </script>
 </body>
-
 </html>
