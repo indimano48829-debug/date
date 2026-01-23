@@ -16,38 +16,11 @@
       align-items: center;
       text-align: center;
       padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom);
-      position: relative;
-      overflow: hidden;
     }
-
-    /* 🔑 6 танцующих котиков, увеличенных на 50% */
-    .dancing-cat {
-      position: absolute;
-      width: 120px;
-      opacity: 0.7;
-      z-index: -1;
-      pointer-events: none;
-      animation: float 6s infinite ease-in-out;
-    }
-
-    .cat-1 { top: 15%; left: 10%; animation-delay: 0s; }
-    .cat-2 { top: 65%; left: 85%; animation-delay: 1s; width: 135px; }
-    .cat-3 { top: 35%; left: 50%; animation-delay: 2s; width: 105px; }
-    .cat-4 { top: 80%; left: 20%; animation-delay: 3s; width: 125px; }
-    .cat-5 { top: 25%; left: 75%; animation-delay: 4s; width: 115px; }
-    .cat-6 { top: 50%; left: 5%;  animation-delay: 5s; width: 130px; }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-25px) rotate(6deg); }
-    }
-
     .screen {
       display: none;
       width: 100%;
       max-width: 480px;
-      position: relative;
-      z-index: 10;
     }
     .screen.active {
       display: block;
@@ -85,8 +58,8 @@
 
     .choice-img {
       width: 100%;
-      height: 220px;
-      object-fit: cover;
+      height: 350px;
+      object-fit: auto;
       border-radius: 16px;
       margin: 20px 0;
       box-shadow: 0 6px 16px rgba(0,0,0,0.1);
@@ -127,7 +100,7 @@
       position: relative;
       width: 100%;
       height: 0;
-      padding-bottom: 177.78%; /* 9:16 */
+      padding-bottom: 177.78%; /* 9:16 для Shorts */
       margin: 20px 0;
       border-radius: 20px;
       overflow: hidden;
@@ -145,14 +118,6 @@
 </head>
 <body>
 
-  <!-- 🔑 6 танцующих котиков -->
-  <img src="https://media.tenor.com/5w8jS20o5PUAAAAM/pepewifhat.gif" class="dancing-cat cat-1" alt="">
-  <img src="https://media.tenor.com/5w8jS20o5PUAAAAM/pepewifhat.gif" class="dancing-cat cat-2" alt="">
-  <img src="https://media.tenor.com/5w8jS20o5PUAAAAM/pepewifhat.gif" class="dancing-cat cat-3" alt="">
-  <img src="https://media.tenor.com/5w8jS20o5PUAAAAM/pepewifhat.gif" class="dancing-cat cat-4" alt="">
-  <img src="https://media.tenor.com/5w8jS20o5PUAAAAM/pepewifhat.gif" class="dancing-cat cat-5" alt="">
-  <img src="https://media.tenor.com/5w8jS20o5PUAAAAM/pepewifhat.gif" class="dancing-cat cat-6" alt="">
-
   <!-- Скрытая форма Formspree -->
   <form id="rsvp-form" action="https://formspree.io/f/xgoorkzz" method="POST" style="display:none;">
     <input type="text" name="answer" id="answer-field">
@@ -165,6 +130,7 @@
       <p>С прошедшим новым годом!<br>Надеюсь подарок тебе понравился, пусть он согревает тебя, пока ты одна.<br>А эта открытка вызовет у тебя широчайшую улыбку.<br>Я хочу наладить коннект между нами.</p>
       <p><strong>Поэтому хотел бы узнать у тебя, ты согласна?</strong></p>
 
+      <!-- 🔑 КНОПКИ ВЫШЕ КАРТИНКИ -->
       <button class="btn yes" onclick="submitAndGo('Да', 'screen2')">Да</button>
       <button class="btn no" onclick="submitAndGo('Нет', 'screen3')">Нет</button>
 
@@ -198,8 +164,7 @@
   <!-- Экран 3: Видео -->
   <div class="screen" id="screen3">
     <div class="card">
-      <h2>😔 Я всё равно ценю тебя…</h2>
-      <p>Посмотри это видео.</p>
+      <h2>😔 Я всё равно ценю тебя и уважаю твой выбор.Всё будет, но не сразу🙃</h2>
       <div class="video-wrapper">
         <iframe 
           src="https://www.youtube.com/embed/pm5DLDhn2F0"
@@ -211,95 +176,97 @@
     </div>
   </div>
 
-  <script>
-    function submitToFormspree(answer) {
-      const field = document.getElementById('answer-field');
-      const form = document.getElementById('rsvp-form');
-      if (field && form) {
-        field.value = answer;
-        const formData = new FormData(form);
-        fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          headers: { 'Accept': 'application/json' }
-        }).catch(err => console.error('Ошибка отправки:', err));
-      }
+<script>
+  function submitToFormspree(answer) {
+    const field = document.getElementById('answer-field');
+    const form = document.getElementById('rsvp-form');
+    if (field && form) {
+      field.value = answer;
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      }).catch(err => console.error('Ошибка отправки:', err));
     }
+  }
 
-    function submitAndGo(answer, nextScreenId) {
-      submitToFormspree(answer);
-      document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
-      document.getElementById(nextScreenId).classList.add('active');
-    }
+  function submitAndGo(answer, nextScreenId) {
+    submitToFormspree(answer);
+    document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+    document.getElementById(nextScreenId).classList.add('active');
+  }
 
-    function handleChoice(place) {
-      // 🔑 ЗАМЕНИ ЭТИ ФРАЗЫ НА СВОИ!
-      const messages = {
+  function handleChoice(place) {
+    // 🔑 ЗАМЕНИ ЭТИ ФРАЗЫ НА СВОИ
+    const messages = {
       'Каток': 'Научишь меня тормозить красиво?🤪',
       'Горнолыжный курорт': 'Я буду твоим личным инструктором, но только если ты забрала теплый костюм!🏂',
       'Ресторан': 'Я надену самый новый шмот 2026 года, а ты будешь так же прекрасна как и всегда🌸'
-      };
+    };
 
-      const answer = `Да — ${place}`;
-      submitToFormspree(answer);
+    const answer = `Да — ${place}`;
+    submitToFormspree(answer);
 
-      const modal = document.createElement('div');
-      modal.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
+    // Создаём модальное окно
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    `;
+
+    const content = document.createElement('div');
+    content.style.cssText = `
+      background: white;
+      padding: 32px;
+      border-radius: 24px;
+      text-align: center;
+      max-width: 90%;
+      width: 320px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    `;
+    content.innerHTML = `
+      <p style="font-size: 1.2rem; line-height: 1.5; margin-bottom: 24px;">${messages[place]}</p>
+      <button id="close-btn" style="
+        background: #e91e63;
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 50px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        cursor: pointer;
         width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.7);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 2000;
-      `;
+      ">ОК</button>
+    `;
 
-      const content = document.createElement('div');
-      content.style.cssText = `
-        background: white;
-        padding: 32px;
-        border-radius: 24px;
-        text-align: center;
-        max-width: 90%;
-        width: 320px;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.25);
-      `;
-      content.innerHTML = `
-        <p style="font-size: 1.2rem; line-height: 1.5; margin-bottom: 24px;">${messages[place]}</p>
-        <button id="close-btn" style="
-          background: #e91e63;
-          color: white;
-          border: none;
-          padding: 14px 28px;
-          border-radius: 50px;
-          font-weight: bold;
-          font-size: 1.1rem;
-          cursor: pointer;
-          width: 100%;
-        ">ОК</button>
-      `;
+    modal.appendChild(content);
+    document.body.appendChild(modal);
 
-      modal.appendChild(content);
-      document.body.appendChild(modal);
-
-      document.getElementById('close-btn').onclick = function() {
-        document.body.innerHTML = `
-          <div style="
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            text-align: center;
-            padding: 40px;
-            color: #555;
-          ">
-            <h2 style="color: #e91e63; margin-bottom: 20px;">💖 Спасибо!</h2>
-            <p>Теперь можешь закрыть эту вкладку и вспомнить замечательную песню Небраска-Капелька.</p>
-          </div>
-        `;
-      };
-    }
-  </script>
+    // Обработчик кнопки ОК
+    document.getElementById('close-btn').onclick = function() {
+      // Удаляем всё содержимое страницы
+      document.body.innerHTML = `
+        <div style="
+          font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+          text-align: center;
+          padding: 40px;
+          color: #555;
+        ">
+          <h2 style="color: #e91e63; margin-bottom: 20px;">💖 Спасибо!</h2>
+          <p>Теперь можешь закрыть эту вкладку и вспомнить замечательную песню Небраска-Капелька.</p>
+        </div>
+      `;
+    };
+  }
+</script>
 </body>
 </html>
-
